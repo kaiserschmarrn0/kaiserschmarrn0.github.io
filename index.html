@@ -1,1 +1,48 @@
-:)
+<html>
+    <body>
+        <input type="text" id="key">
+        <input type="button" id="reset" value="reset">
+        <div id="out"></div>
+    </body>
+    <script>
+        window.onload = () => {
+            var window = []
+            var count = 0
+            var start = null
+            var end = null
+
+            const key = document.querySelector("#key")
+            const out = document.querySelector("#out")
+
+            key.onkeydown = () => {
+                if (start == null) {
+                    start = Date.now()
+                    count = 0
+                }
+
+                end = Date.now()
+                window.push(end)
+                count++
+
+                const ms = end - start;
+                const bpm = count / (ms / (1000 * 60))
+
+                var variability = 0;
+                for (var i = 1; i < window.length; i++) {
+                    variability += (Math.abs((window[i] - start) - i * (ms / count))) / i
+                }
+
+                out.innerHTML = "kpm: " + bpm + "<br>avg variablity: " + variability + " ms";
+            }
+
+            document.querySelector("#reset").onclick = () => {
+                window = []
+                key.value = ""
+                start = null
+                end = null
+                count = 0
+                out.innerHTML = ""
+            }
+        }
+    </script>
+</html>
