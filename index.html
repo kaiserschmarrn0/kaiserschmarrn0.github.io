@@ -10,6 +10,7 @@
             var count = 0
             var start = null
             var end = null
+            var avg = 0;
 
             const key = document.querySelector("#key")
             const out = document.querySelector("#out")
@@ -27,15 +28,14 @@
                 const ms = end - start;
                 const bpm = count / (ms / (1000 * 60))
 
-                var variability = 0;
-                for (var i = 1; i < window.length; i++) {
-                    variability += (Math.abs((window[i] - start) - i * (ms / count))) / i
-                }
+                const cur_var = Math.abs((window[count - 1] - start) - (count - 1) * (ms / count))
+                avg = ((count - 1) * avg + cur_var) / count
 
-                out.innerHTML = "kpm: " + bpm + "<br>avg variablity: " + variability + " ms";
+                out.innerHTML = "kpm: " + bpm + "<br>avg variablity: " + avg + " ms"
             }
 
             document.querySelector("#reset").onclick = () => {
+                avg = 0;
                 window = []
                 key.value = ""
                 start = null
